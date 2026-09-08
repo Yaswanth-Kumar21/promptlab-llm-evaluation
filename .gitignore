@@ -1,0 +1,75 @@
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+*.so
+.venv/
+venv/
+env/
+ENV/
+
+# ─── Environment / Secrets ────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ─── Node / Frontend ──────────────────────────────────────────────────────────
+node_modules/
+dist/
+.cache/
+*.tsbuildinfo
+
+# ─── Database ─────────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ─── ChromaDB local storage ───────────────────────────────────────────────────
+chroma_data/
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── IDE ──────────────────────────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# ─── Test / Coverage ──────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# ─── Uploads (user documents) ─────────────────────────────────────────────────
+rag/documents/*.pdf
+rag/documents/*.txt
+rag/documents/*.md
+!rag/documents/README.md
+
+# ─── Evaluation output ────────────────────────────────────────────────────────
+evaluation/results/*.json
+evaluation/experiments/*.json

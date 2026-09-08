@@ -1,0 +1,47 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PromptLab — Docker Compose (local development)
+# Usage:
+#   docker compose up --build
+#
+# Requires a .env file in the project root (copy from .env.example).
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: promptlab_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./rag/documents:/app/rag/documents
+      - chroma_data:/app/chroma_data
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=sqlite:////app/promptlab.db
+      - CHROMA_PERSIST_DIR=/app/chroma_data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: promptlab_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
