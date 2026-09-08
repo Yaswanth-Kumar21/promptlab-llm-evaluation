@@ -1,0 +1,108 @@
+{
+  "_meta": {
+    "dataset": "extraction",
+    "description": "Structured information extraction test cases",
+    "version": "1.0.0",
+    "phase_created": 1,
+    "target_size": 20,
+    "current_size": 5,
+    "note": "Extraction is evaluated using JSON schema validation + field-level exact matching"
+  },
+  "cases": [
+    {
+      "id": "ext_001",
+      "input": "John Smith, a software engineer with 7 years of experience, applied for the Senior Backend Developer role at TechCorp on November 15, 2025. His email is john.smith@email.com.",
+      "expected_output": {
+        "name": "John Smith",
+        "role": "Senior Backend Developer",
+        "company": "TechCorp",
+        "experience_years": 7,
+        "application_date": "2025-11-15"
+      },
+      "expected_behavior": "Extract all fields accurately. experience_years must be an integer.",
+      "category": "person_info",
+      "difficulty": "easy",
+      "schema": {
+        "name": "string",
+        "role": "string",
+        "company": "string",
+        "experience_years": "integer",
+        "application_date": "YYYY-MM-DD string"
+      }
+    },
+    {
+      "id": "ext_002",
+      "input": "Invoice #INV-2025-0847 dated December 3, 2025. Client: Acme Corp. Items: Web development services (40 hours at $150/hour = $6,000), Domain registration ($25), SSL certificate ($99). Subtotal: $6,124. Tax (18%): $1,102.32. Total: $7,226.32. Payment due: January 3, 2026.",
+      "expected_output": {
+        "invoice_number": "INV-2025-0847",
+        "date": "2025-12-03",
+        "client": "Acme Corp",
+        "subtotal": 6124.00,
+        "tax": 1102.32,
+        "total": 7226.32,
+        "due_date": "2026-01-03"
+      },
+      "expected_behavior": "Extract all financial fields as numbers, not strings. Date in ISO format.",
+      "category": "invoice",
+      "difficulty": "medium",
+      "schema": {
+        "invoice_number": "string",
+        "date": "YYYY-MM-DD string",
+        "client": "string",
+        "subtotal": "number",
+        "tax": "number",
+        "total": "number",
+        "due_date": "YYYY-MM-DD string"
+      }
+    },
+    {
+      "id": "ext_003",
+      "input": "The meeting is scheduled for Tuesday, January 14, 2026 at 3:30 PM EST. Attendees: Alice Chen (CEO), Bob Patel (CTO), Maria Garcia (VP Sales). Location: Conference Room B, 42nd floor. Agenda: Q4 review, 2026 roadmap, hiring plan.",
+      "expected_output": {
+        "date": "2026-01-14",
+        "time": "15:30",
+        "timezone": "EST",
+        "attendees": ["Alice Chen", "Bob Patel", "Maria Garcia"],
+        "location": "Conference Room B, 42nd floor",
+        "agenda_items": ["Q4 review", "2026 roadmap", "hiring plan"]
+      },
+      "expected_behavior": "Time must be in 24h format. Attendees as list (names only, no titles). Agenda as list.",
+      "category": "meeting",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ext_004",
+      "input": "Product: UltraBoost Running Shoe. SKU: UB-2025-M-10. Price: $189.99. Available sizes: 7, 8, 9, 10, 11, 12. Colors: Black/White, Navy/Gold. In stock: Yes. Rating: 4.7 out of 5 based on 2,341 reviews.",
+      "expected_output": {
+        "product_name": "UltraBoost Running Shoe",
+        "sku": "UB-2025-M-10",
+        "price": 189.99,
+        "available_sizes": [7, 8, 9, 10, 11, 12],
+        "colors": ["Black/White", "Navy/Gold"],
+        "in_stock": true,
+        "rating": 4.7,
+        "review_count": 2341
+      },
+      "expected_behavior": "Sizes as integer list. Price and rating as numbers. in_stock as boolean.",
+      "category": "product",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ext_005",
+      "input": "Patient: Emma Wilson, DOB: 1985-03-22. Prescription issued: 2026-01-10. Medication: Metformin 500mg. Dosage: Take one tablet twice daily with meals. Duration: 90 days. Prescribing physician: Dr. Raj Kumar, License: MD-54321.",
+      "expected_output": {
+        "patient_name": "Emma Wilson",
+        "dob": "1985-03-22",
+        "prescription_date": "2026-01-10",
+        "medication": "Metformin",
+        "dosage_mg": 500,
+        "instructions": "Take one tablet twice daily with meals",
+        "duration_days": 90
+      },
+      "expected_behavior": "Extract medication name without dosage. Dosage as integer. No PII beyond what is specified in schema.",
+      "category": "medical",
+      "difficulty": "hard",
+      "notes": "This is a synthetic test case. Do not use real patient data in evaluation datasets."
+    }
+  ]
+}

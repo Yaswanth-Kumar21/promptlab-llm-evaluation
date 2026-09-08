@@ -1,0 +1,93 @@
+{
+  "_meta": {
+    "dataset": "classification",
+    "description": "Sentiment and topic classification test cases",
+    "version": "1.0.0",
+    "phase_created": 1,
+    "target_size": 20,
+    "current_size": 10,
+    "note": "Expanded to 20 cases in Phase 7"
+  },
+  "cases": [
+    {
+      "id": "cls_001",
+      "input": "The product arrived on time and works exactly as described. Very happy with the purchase.",
+      "expected_output": "positive",
+      "expected_behavior": "Classify sentiment as positive, negative, or neutral",
+      "category": "sentiment",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cls_002",
+      "input": "Completely broken on arrival. Customer support was useless and I never got a refund.",
+      "expected_output": "negative",
+      "expected_behavior": "Classify sentiment as positive, negative, or neutral",
+      "category": "sentiment",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cls_003",
+      "input": "It works. Nothing special. Does what it says.",
+      "expected_output": "neutral",
+      "expected_behavior": "Classify sentiment as positive, negative, or neutral",
+      "category": "sentiment",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cls_004",
+      "input": "I love the design but the battery life is terrible. Mixed feelings overall.",
+      "expected_output": "neutral",
+      "expected_behavior": "Mixed review should classify as neutral — model must not pick a side",
+      "category": "sentiment",
+      "difficulty": "medium"
+    },
+    {
+      "id": "cls_005",
+      "input": "This is technically functional but the documentation is non-existent and setup took 3 hours.",
+      "expected_output": "negative",
+      "expected_behavior": "Overall negative experience despite partial functionality",
+      "category": "sentiment",
+      "difficulty": "medium"
+    },
+    {
+      "id": "cls_006",
+      "input": "How do I reset my password?",
+      "expected_output": "support_request",
+      "expected_behavior": "Classify intent as: support_request, complaint, feedback, question",
+      "category": "intent",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cls_007",
+      "input": "The new feature you released last week is exactly what I needed. Keep it up!",
+      "expected_output": "feedback",
+      "expected_behavior": "Classify intent as: support_request, complaint, feedback, question",
+      "category": "intent",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cls_008",
+      "input": "I've been charged twice for the same order and nobody is responding to my emails.",
+      "expected_output": "complaint",
+      "expected_behavior": "Classify intent as: support_request, complaint, feedback, question",
+      "category": "intent",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cls_009",
+      "input": "What is the difference between the Basic and Pro plans?",
+      "expected_output": "question",
+      "expected_behavior": "Classify intent as: support_request, complaint, feedback, question",
+      "category": "intent",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cls_010",
+      "input": "Not sure if this is a bug or expected behaviour, but the export button doesn't do anything on Safari.",
+      "expected_output": "support_request",
+      "expected_behavior": "Ambiguous — could be complaint or support request. Likely support_request.",
+      "category": "intent",
+      "difficulty": "hard"
+    }
+  ]
+}

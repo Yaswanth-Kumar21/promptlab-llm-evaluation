@@ -1,0 +1,58 @@
+{
+  "_meta": {
+    "dataset": "summarization",
+    "description": "Text summarization quality test cases",
+    "version": "1.0.0",
+    "phase_created": 1,
+    "target_size": 20,
+    "current_size": 5,
+    "note": "Expanded to 20 cases in Phase 7. Summarization evaluation uses relevance + groundedness metrics."
+  },
+  "cases": [
+    {
+      "id": "sum_001",
+      "input": "FastAPI is a modern, fast web framework for building APIs with Python 3.8+ based on standard Python type hints. The key features are: very high performance, on par with NodeJS and Go; fast to code — increases the speed to develop features by about 200-300%; fewer bugs — reduce about 40% of human (developer) induced errors; intuitive — great editor support, completion everywhere, less time debugging; easy — designed to be easy to use and learn; short — minimise code duplication; robust — get production-ready code with automatic interactive documentation; standards-based — based on, and fully compatible with, the open standards for APIs, OpenAPI and JSON Schema.",
+      "expected_output": "FastAPI is a high-performance Python web framework with type hint-based validation, automatic documentation, and fast development speed.",
+      "expected_behavior": "Concise summary preserving key facts without introducing external information",
+      "category": "technical",
+      "difficulty": "easy",
+      "max_words": 30
+    },
+    {
+      "id": "sum_002",
+      "input": "The water cycle, also known as the hydrological cycle, describes the continuous movement of water within Earth and its atmosphere. The cycle involves evaporation of water from oceans and other water bodies due to solar energy, condensation as water vapour rises and cools to form clouds, precipitation as rain or snow falls back to the surface, and collection in oceans, lakes, and rivers where the cycle begins again. Transpiration from plants also contributes significant moisture to the atmosphere.",
+      "expected_output": "The water cycle describes how water continuously moves through evaporation, condensation, precipitation, and collection.",
+      "expected_behavior": "Simple accurate summary suitable for a non-expert reader",
+      "category": "science",
+      "difficulty": "easy",
+      "max_words": 25
+    },
+    {
+      "id": "sum_003",
+      "input": "In Q3 2025, the company reported revenue of $4.2B, up 18% year-over-year, driven by strong growth in cloud services (+34%) and enterprise software (+22%). Operating margin improved to 28% from 24% in Q3 2024, reflecting cost discipline and operating leverage. The company raised its full-year guidance to $16.5B-$17B in revenue. Management highlighted continued investment in AI infrastructure as a key growth driver for 2026.",
+      "expected_output": "Q3 2025 revenue of $4.2B (+18% YoY), driven by cloud and enterprise software. Operating margin improved to 28%. Full-year guidance raised to $16.5-17B.",
+      "expected_behavior": "Financial summary must preserve all key numbers accurately",
+      "category": "financial",
+      "difficulty": "medium",
+      "max_words": 40
+    },
+    {
+      "id": "sum_004",
+      "input": "Climate change refers to long-term shifts in global temperatures and weather patterns. While some climate change is natural, since the mid-20th century, human activities have been the main driver, primarily through the burning of fossil fuels such as coal, oil and gas, which releases greenhouse gases — mainly carbon dioxide and methane — into the atmosphere. These gases trap heat from the sun, causing the greenhouse effect, which warms the planet. Consequences include rising sea levels, more frequent extreme weather events, disruption of ecosystems, and threats to food and water security.",
+      "expected_output": "Climate change is primarily caused by human fossil fuel use releasing greenhouse gases that warm the planet, leading to rising seas, extreme weather, and threats to ecosystems and food security.",
+      "expected_behavior": "Summary must preserve causal chain: fossil fuels → greenhouse gases → warming → consequences",
+      "category": "science",
+      "difficulty": "medium",
+      "max_words": 40
+    },
+    {
+      "id": "sum_005",
+      "input": "Attention is a mechanism in neural networks that allows the model to focus on relevant parts of the input sequence when producing each output token. In the transformer architecture introduced in 'Attention Is All You Need' (Vaswani et al., 2017), self-attention computes a weighted sum of value vectors, where weights are determined by the compatibility between query and key vectors. Multi-head attention runs multiple attention operations in parallel, allowing the model to attend to different aspects of the input simultaneously. This architecture forms the basis of all modern large language models including GPT, BERT, and their successors.",
+      "expected_output": "Attention lets neural networks focus on relevant input parts. Transformers use multi-head self-attention to attend to different aspects simultaneously, forming the foundation of modern LLMs.",
+      "expected_behavior": "Technical summary must preserve key concepts without oversimplifying",
+      "category": "technical",
+      "difficulty": "hard",
+      "max_words": 35
+    }
+  ]
+}

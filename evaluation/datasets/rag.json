@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "dataset": "rag",
+    "description": "RAG pipeline evaluation test cases — requires documents to be loaded",
+    "version": "1.0.0",
+    "phase_created": 1,
+    "target_size": 20,
+    "current_size": 5,
+    "note": "These cases require the corresponding document to be loaded in ChromaDB before evaluation"
+  },
+  "cases": [
+    {
+      "id": "rag_001",
+      "document_ref": "demo_company_policy.txt",
+      "context_snippet": "Digital goods are non-refundable once downloaded.",
+      "question": "Are digital products eligible for a refund?",
+      "expected_output": "No, digital goods are non-refundable once downloaded.",
+      "expected_behavior": "Answer from context. Include source citation.",
+      "category": "policy_qa",
+      "difficulty": "easy",
+      "evaluation": {
+        "groundedness": "answer must cite context_snippet",
+        "hallucination_check": "must not add information not in context"
+      }
+    },
+    {
+      "id": "rag_002",
+      "document_ref": "demo_company_policy.txt",
+      "context_snippet": "The company was founded in 2021 by Alice Chen.",
+      "question": "Who founded the company, and in what year?",
+      "expected_output": "The company was founded in 2021 by Alice Chen.",
+      "expected_behavior": "Answer from context. Must include both name and year.",
+      "category": "factual_qa",
+      "difficulty": "easy",
+      "evaluation": {
+        "accuracy": "exact_match on year (2021) and name (Alice Chen)"
+      }
+    },
+    {
+      "id": "rag_003",
+      "document_ref": "demo_company_policy.txt",
+      "context_snippet": "The company was founded in 2021 by Alice Chen.",
+      "question": "Who was the CEO of the company in 2018?",
+      "expected_output": "not_in_context",
+      "expected_behavior": "The context does not mention 2018. Model must refuse to answer.",
+      "category": "negative_qa",
+      "difficulty": "medium",
+      "evaluation": {
+        "hallucination_check": "response must contain refusal phrase (not in context / cannot determine / no information)"
+      }
+    },
+    {
+      "id": "rag_004",
+      "document_ref": "demo_technical_doc.md",
+      "context_snippet": "To authenticate, include the header: Authorization: Bearer <token>",
+      "question": "How do I authenticate API requests?",
+      "expected_output": "Use the Authorization: Bearer <token> header.",
+      "expected_behavior": "Answer from context. Include the exact header format.",
+      "category": "technical_qa",
+      "difficulty": "easy"
+    },
+    {
+      "id": "rag_005",
+      "document_ref": "demo_technical_doc.md",
+      "context_snippet": "Rate limits: 100 requests per minute for free tier, 1000 for paid tier.",
+      "question": "What is the rate limit for free tier users?",
+      "expected_output": "100 requests per minute",
+      "expected_behavior": "Precise numerical answer from context.",
+      "category": "technical_qa",
+      "difficulty": "easy",
+      "evaluation": {
+        "accuracy": "exact_match on 100 and per minute"
+      }
+    }
+  ]
+}
