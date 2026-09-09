@@ -23,6 +23,9 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
 from app.api import health, providers, prompts, experiments, evaluations, documents, rag
 from app.core.config import settings
 from app.core.database import init_db
@@ -86,6 +89,54 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# ── Global exception handlers ─────────────────────────────────────────────────
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """
+    Handle Pydantic validation errors (422).
+
+    Returns a clean list of field errors without exposing internals.
+    """
+    request_id = getattr(request.state, "request_id", "unknown")
+    errors = []
+    for err in exc.errors():
+        field = " → ".join(str(loc) for loc in err.get("loc", []))
+        errors.append({"field": field, "message": err.get("msg", "")})
+
+    logger.info(
+        "validation_error",
+        request_id=request_id,
+        path=request.url.path,
+        error_count=len(errors),
+    )
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "validation_error",
+            "message": "Request validation failed. Check the 'detail' field.",
+            "detail": errors,
+            "request_id": request_id,
+        },
+    )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    """
+    Handle HTTP exceptions (404, 405, etc.) with consistent JSON format.
+    """
+    request_id = getattr(request.state, "request_id", "unknown")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": "http_error",
+            "message": exc.detail or "An HTTP error occurred.",
+            "request_id": request_id,
+        },
+    )
 
 
 # ── Request ID + timing middleware ────────────────────────────────────────────

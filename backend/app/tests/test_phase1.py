@@ -13,18 +13,12 @@ No real LLM API calls are made.
 """
 
 import pytest
-from httpx import ASGITransport, AsyncClient
+from httpx import AsyncClient
 
 from app.main import app
 
 
-@pytest.fixture
-async def client():
-    """Async test client that talks directly to the ASGI app."""
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
-        yield ac
+# client fixture is provided by conftest.py
 
 
 @pytest.mark.asyncio

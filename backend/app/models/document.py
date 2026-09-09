@@ -11,7 +11,7 @@ The ORM tracks metadata; the actual vector data lives in ChromaDB.
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, Integer, String, Text
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -57,7 +57,7 @@ class DocumentChunk(Base):
     )
     document_id: Mapped[str] = mapped_column(
         String(36),
-        # ForeignKey defined as string to avoid circular import issues at module load
+        ForeignKey("documents.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
