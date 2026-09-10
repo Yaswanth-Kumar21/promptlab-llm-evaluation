@@ -27,6 +27,7 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api import health, providers, prompts, experiments, evaluations, documents, rag
+from app.api import job_analyzer
 from app.core.config import settings
 from app.core.database import init_db
 from app.core.logging import configure_logging, get_logger
@@ -208,6 +209,7 @@ app.include_router(experiments.router, prefix="/api")
 app.include_router(evaluations.router, prefix="/api")
 app.include_router(documents.router, prefix="/api")
 app.include_router(rag.router, prefix="/api")
+app.include_router(job_analyzer.router, prefix="/api")
 
 
 # ── Root redirect ─────────────────────────────────────────────────────────────

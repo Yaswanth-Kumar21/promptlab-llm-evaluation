@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: promptlab-backend
+    runtime: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false   # Set in Render dashboard — never commit
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: DEFAULT_PROVIDER
+        value: mock
+      - key: CORS_ORIGINS
+        sync: false   # Set to your Vercel URL
+      - key: APP_SECRET_KEY
+        generateValue: true

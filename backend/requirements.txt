@@ -24,8 +24,9 @@ google-generativeai==0.8.3
 mistralai==1.2.5
 
 # ── Embeddings / Vector store ─────────────────────────────────────────────────
-chromadb==0.5.23
+# chromadb==0.5.23          # requires C++ compiler — use on Linux/Mac or with Build Tools
 sentence-transformers==3.3.1    # local embeddings, no API key needed
+# numpy is installed as a sentence-transformers dependency
 
 # ── Document processing ───────────────────────────────────────────────────────
 pypdf==5.1.0                    # PDF extraction

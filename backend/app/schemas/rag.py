@@ -1,10 +1,47 @@
-"""
-Pydantic schemas for RAG pipeline.
-"""
+"""Pydantic schemas for RAG endpoints."""
 
-from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, Field
+
+
+class RAGSource(BaseModel):
+    document_id: str
+    chunk_id: str
+    filename: str
+    page: Optional[int]
+    chunk_index: int
+    relevance_score: float
+    content_preview: str
+
+
+class RAGQueryRequest(BaseModel):
+    question: str = Field(..., min_length=1, max_length=4000)
+    provider: str = Field(default="mock")
+    model: str = Field(default="")
+    top_k: int = Field(default=5, ge=1, le=20)
+    document_id: Optional[str] = Field(
+        default=None,
+        description="If set, restrict retrieval to one document."
+    )
+
+
+class RAGQueryResponse(BaseModel):
+    question: str
+    answer: str
+    sources: List[RAGSource]
+    chunks_retrieved: int
+    provider: str
+    model: str
+    latency_ms: int
+    error: Optional[str] = None
+
+
+class DocumentUploadResponse(BaseModel):
+    document_id: str
+    filename: str
+    status: str
+    chunk_count: int
+    message: str
 
 
 class DocumentOut(BaseModel):
@@ -16,40 +53,5 @@ class DocumentOut(BaseModel):
     status: str
     chunk_count: int
     error_message: str
-    created_at: datetime
 
     model_config = {"from_attributes": True}
-
-
-class RAGQueryRequest(BaseModel):
-    """POST /api/rag/query"""
-    question: str = Field(..., min_length=1, max_length=4_000)
-    provider: str = Field(default="mock")
-    model: str = Field(default="")
-    temperature: float = Field(default=0.3, ge=0.0, le=2.0)
-    max_tokens: int = Field(default=1024, ge=1, le=8_192)
-    top_k: int = Field(default=5, ge=1, le=20, description="Number of chunks to retrieve")
-    document_ids: Optional[List[str]] = Field(
-        default=None,
-        description="Limit retrieval to specific documents. None = search all.",
-    )
-
-
-class RetrievedChunk(BaseModel):
-    chunk_id: str
-    document_id: str
-    filename: str
-    content: str
-    page_number: Optional[int]
-    similarity_score: float
-
-
-class RAGQueryResponse(BaseModel):
-    answer: str
-    sources: List[RetrievedChunk]
-    provider: str
-    model: str
-    latency_ms: int
-    retrieval_latency_ms: int
-    generation_latency_ms: int
-    chunks_retrieved: int

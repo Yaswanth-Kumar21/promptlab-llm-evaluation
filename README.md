@@ -331,31 +331,41 @@ POST /api/rag/query       RAG query with citations (Phase 9)
 
 ## Deployment
 
-### Backend (Render / Railway / Fly.io)
-```bash
-# Set environment variables in dashboard (never in code)
-# Build command:
-pip install -r requirements.txt
-# Start command:
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
-```
+### Backend — Render (free tier available)
 
-### Frontend (Vercel)
-```bash
-# Set VITE_API_URL=https://your-backend.render.com in Vercel env vars
-npm run build
-# Vercel auto-detects Vite
-```
+1. Push to GitHub (already done)
+2. Go to [render.com](https://render.com) → New Web Service → connect your repo
+3. Set:
+   - **Build command:** `pip install -r requirements.txt`
+   - **Start command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+   - **Root directory:** `backend`
+4. Add environment variables in the Render dashboard (never in code):
+   ```
+   APP_ENV=production
+   DATABASE_URL=<your PostgreSQL URL>
+   OPENAI_API_KEY=<optional>
+   CORS_ORIGINS=https://your-app.vercel.app
+   APP_SECRET_KEY=<random string>
+   ```
 
-### Database (Production)
-Replace SQLite with PostgreSQL:
-```env
-DATABASE_URL=postgresql://user:password@host:5432/promptlab
-```
-Run migrations: `alembic upgrade head`
+### Frontend — Vercel (free tier)
 
-**Note:** LLM API keys cost money in production. The mock provider is free and
-works without any external service.
+1. Go to [vercel.com](https://vercel.com) → New Project → import repo
+2. Set **Root directory:** `frontend`
+3. Add environment variable: `VITE_API_URL=https://your-backend.onrender.com`
+4. Deploy — Vercel auto-detects Vite
+
+### Vector Store Note
+
+The local JSON vector store works for demos. For production:
+- Install `chromadb` on Linux (no C++ issues there)
+- Or use pgvector: `pip install pgvector` + PostgreSQL with vector extension
+
+### Important: API Key Costs
+
+LLM APIs cost money. The **Mock provider is free** and works for all demos.
+Only add real API keys when you specifically want to demo live model responses.
+Estimate: ~$0.01–0.10 per demo session with GPT-4o-mini.
 
 ---
 
