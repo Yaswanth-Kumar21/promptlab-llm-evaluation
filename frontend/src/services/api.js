@@ -1,99 +1,105 @@
 /**
  * PromptLab API client
  *
- * Centralised Axios instance so every request automatically:
- *  - Targets the correct base URL (from env or proxy)
- *  - Sends JSON Content-Type
- *  - Has a reasonable timeout
- *  - Has consistent error handling
- *
- * Usage:
- *   import api from '@/services/api'
- *   const data = await api.get('/providers')
+ * Centralised Axios instance — all requests automatically get:
+ *  - Correct base URL (env or Vite proxy)
+ *  - JSON Content-Type
+ *  - 30-second timeout (LLM calls can be slow)
+ *  - Normalised error objects
  */
 
 import axios from 'axios'
 
-// In development Vite proxies /api → http://localhost:8000/api
-// In production set VITE_API_URL in your environment
 const BASE_URL = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api`
   : '/api'
 
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 30_000,   // 30 s — LLM calls can be slow
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  timeout: 60_000,   // 60 s for slow models
+  headers: { 'Content-Type': 'application/json' },
 })
 
-// ── Request interceptor ────────────────────────────────────────────────────
-api.interceptors.request.use(
-  (config) => {
-    // Nothing sensitive (keys, tokens) should be injected here.
-    // Authentication will be added in a later phase.
-    return config
-  },
-  (error) => Promise.reject(error),
-)
-
-// ── Response interceptor ──────────────────────────────────────────────────
+// ── Response interceptor — normalise errors ───────────────────────────────
 api.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   (error) => {
-    // Normalise error shape so every component sees the same structure
-    const normalised = {
-      message: 'An unexpected error occurred.',
-      status: null,
-      detail: null,
-    }
+    const out = { message: 'An unexpected error occurred.', status: null, detail: null }
 
     if (error.response) {
-      normalised.status = error.response.status
+      out.status = error.response.status
       const data = error.response.data
-
       if (typeof data === 'string') {
-        normalised.message = data
+        out.message = data
       } else if (data?.detail) {
-        // FastAPI validation errors return { detail: [...] } or { detail: "string" }
-        normalised.message = Array.isArray(data.detail)
+        out.message = Array.isArray(data.detail)
           ? data.detail.map((e) => e.msg).join(', ')
-          : data.detail
-        normalised.detail = data.detail
+          : String(data.detail)
+        out.detail = data.detail
       } else if (data?.message) {
-        normalised.message = data.message
+        out.message = data.message
       }
-
-      // Don't expose 500 details to the UI — just show a friendly message
-      if (normalised.status === 500) {
-        normalised.message =
-          'The server encountered an error. Please try again.'
-      }
+      if (out.status === 500) out.message = 'The server encountered an error. Please try again.'
     } else if (error.request) {
-      normalised.message =
-        'Could not reach the server. Is the backend running?'
+      out.message = 'Could not reach the server. Is the backend running on port 8000?'
     } else if (error.code === 'ECONNABORTED') {
-      normalised.message = 'Request timed out. The model may be busy.'
+      out.message = 'Request timed out. The model may be busy — try again.'
     }
 
-    return Promise.reject(normalised)
+    return Promise.reject(out)
   },
 )
 
 export default api
 
-// ── Typed helper functions ─────────────────────────────────────────────────
+// ── Typed helper functions ────────────────────────────────────────────────
 
-/** GET /api/health */
-export const fetchHealth = () => api.get('/health').then((r) => r.data)
+// System
+export const fetchHealth    = () => api.get('/health').then(r => r.data)
+export const fetchProviders = () => api.get('/providers').then(r => r.data)
 
-/** GET /api/providers */
-export const fetchProviders = () => api.get('/providers').then((r) => r.data)
+// Playground
+export const runPrompt = (body) =>
+  api.post('/prompts/run', body).then(r => r.data)
 
-/** GET /api/prompts */
-export const fetchPrompts = () => api.get('/prompts').then((r) => r.data)
+export const runTechnique = (body) =>
+  api.post('/prompts/run/technique', body).then(r => r.data)
 
-/** GET /api/experiments */
-export const fetchExperiments = () =>
-  api.get('/experiments').then((r) => r.data)
+// Prompt Library
+export const fetchPrompts = (params) =>
+  api.get('/prompts', { params }).then(r => r.data)
+
+export const createPrompt = (body) =>
+  api.post('/prompts', body).then(r => r.data)
+
+export const fetchPrompt = (id) =>
+  api.get(`/prompts/${id}`).then(r => r.data)
+
+export const updatePrompt = (id, body) =>
+  api.put(`/prompts/${id}`, body).then(r => r.data)
+
+export const deletePrompt = (id) =>
+  api.delete(`/prompts/${id}`)
+
+// Versions
+export const fetchVersions = (promptId) =>
+  api.get(`/prompts/${promptId}/versions`).then(r => r.data)
+
+export const createVersion = (promptId, body) =>
+  api.post(`/prompts/${promptId}/versions`, body).then(r => r.data)
+
+export const markBestVersion = (promptId, versionId) =>
+  api.put(`/prompts/${promptId}/versions/${versionId}/best`).then(r => r.data)
+
+export const duplicateVersion = (promptId, versionId) =>
+  api.post(`/prompts/${promptId}/versions/${versionId}/duplicate`).then(r => r.data)
+
+// Experiments
+export const fetchExperiments = (params) =>
+  api.get('/experiments', { params }).then(r => r.data)
+
+export const fetchExperiment  = (id) =>
+  api.get(`/experiments/${id}`).then(r => r.data)
+
+export const fetchStats = () =>
+  api.get('/experiments/stats').then(r => r.data)

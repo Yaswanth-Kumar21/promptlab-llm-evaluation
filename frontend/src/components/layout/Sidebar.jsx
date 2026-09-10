@@ -16,6 +16,7 @@ const NAV_ITEMS = [
     items: [
       { to: '/',           label: 'Dashboard',      icon: '▤' },
       { to: '/playground', label: 'Playground',     icon: '⚡' },
+      { to: '/techniques', label: 'Techniques',     icon: '🔬' },
       { to: '/library',    label: 'Prompt Library', icon: '📚' },
       { to: '/versions',   label: 'Versions',       icon: '🔀' },
       { to: '/experiments',label: 'Experiments',    icon: '🧪' },

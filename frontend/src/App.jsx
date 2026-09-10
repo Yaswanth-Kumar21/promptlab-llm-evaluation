@@ -8,18 +8,19 @@
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Layout        from './components/layout/Layout'
-import Dashboard     from './pages/Dashboard'
-import Playground    from './pages/Playground'
-import PromptLibrary from './pages/PromptLibrary'
-import PromptVersions from './pages/PromptVersions'
-import Experiments   from './pages/Experiments'
-import Evaluation    from './pages/Evaluation'
-import RAGLab        from './pages/RAGLab'
-import SafetyLab     from './pages/SafetyLab'
-import JobAnalyzer   from './pages/JobAnalyzer'
-import KnowledgeBase from './pages/KnowledgeBase'
-import Settings      from './pages/Settings'
+import Layout          from './components/layout/Layout'
+import Dashboard       from './pages/Dashboard'
+import Playground      from './pages/Playground'
+import PromptTechniques from './pages/PromptTechniques'
+import PromptLibrary   from './pages/PromptLibrary'
+import PromptVersions  from './pages/PromptVersions'
+import Experiments     from './pages/Experiments'
+import Evaluation      from './pages/Evaluation'
+import RAGLab          from './pages/RAGLab'
+import SafetyLab       from './pages/SafetyLab'
+import JobAnalyzer     from './pages/JobAnalyzer'
+import KnowledgeBase   from './pages/KnowledgeBase'
+import Settings        from './pages/Settings'
 
 // ── 404 fallback ──────────────────────────────────────────────────────────
 function NotFound() {
@@ -38,11 +39,12 @@ export default function App() {
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/"              element={<Dashboard />} />
-          <Route path="/playground"    element={<Playground />} />
-          <Route path="/library"       element={<PromptLibrary />} />
-          <Route path="/versions"      element={<PromptVersions />} />
-          <Route path="/experiments"   element={<Experiments />} />
+          <Route path="/"               element={<Dashboard />} />
+          <Route path="/playground"     element={<Playground />} />
+          <Route path="/techniques"     element={<PromptTechniques />} />
+          <Route path="/library"        element={<PromptLibrary />} />
+          <Route path="/versions"       element={<PromptVersions />} />
+          <Route path="/experiments"    element={<Experiments />} />
           <Route path="/evaluation"    element={<Evaluation />} />
           <Route path="/rag"           element={<RAGLab />} />
           <Route path="/safety"        element={<SafetyLab />} />
